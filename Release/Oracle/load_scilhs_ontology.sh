@@ -46,7 +46,9 @@ EOF
 # Load the ontology tables
 for ctl in *.ctl; do
     base=${ctl%.*}
-    ORACLE_SID=${sid} sqlldr ROWS=10000 ${pcornet_cdm_user}/${pcornet_cdm} control="$ctl" data="$base".TXT bad="$base".bad log="$base".log errors=10000 || true # ignoring errors!!
+    ORACLE_SID=${sid} sqlldr ${pcornet_cdm_user}/${pcornet_cdm} control="$ctl" data="$base".TXT bad="$base".bad log="$base".log \
+      errors=10000 ROWS=10000 \
+      || true # ignore "All or some rows discarded", "All or some rows rejected" etc.
 done
 
 touch nothing.log
